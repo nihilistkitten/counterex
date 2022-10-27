@@ -1,29 +1,28 @@
 """Tests for counterex."""
 
-import pytest
-
 from copy import deepcopy
 from typing import Any, Callable
 
 import hypothesis.strategies as st
-from hypothesis import given, note, settings, assume
+import pytest
+from hypothesis import assume, given, note, settings
 
 from counterex import (
-    Opt,
+    Item,
     McfOpt,
+    Opt,
     PriorityLandlord,
     PriorityLandlordUnique,
     ReplacementPolicy,
     Trace,
     make_items,
-    Item,
 )
 
 ITEMS = make_items([1, 1, 1, 2, 2, 50, 90, 100, 100])
 
 
 @st.composite
-def traces(draw: Callable[..., Any], max_size=10) -> Trace:
+def traces(draw: Callable[..., Any], max_size: int = 10) -> Trace:
     """Generate a trace."""
     return Trace(draw(st.lists(st.sampled_from(ITEMS), min_size=1, max_size=max_size)))
 
@@ -67,11 +66,10 @@ def is_comp_on(
     trace: Trace, k: int, h: int, algorithm: type[ReplacementPolicy]
 ) -> bool:
     """Check whther the algorithm is optimally competitive on trace."""
-
     return comp_ratio_on(trace, k, h, algorithm) <= k / (k - h + 1)
 
 
-@given(traces(max_size=25), st.integers(1, 4), st.integers(1, 4))
+@given(traces(max_size=20), st.integers(1, 4), st.integers(1, 4))
 @settings(deadline=5000)
 # @example(
 #     Trace(
@@ -113,7 +111,7 @@ def is_sa_on(trace: Trace, k: int, algorithm: type) -> bool:
     note(f"small: {small_set!r}")
     note(f"large: {large_set!r}")
 
-    return small_set.issubset(large_set)
+    return small_set.issubset(large_set)  # type: ignore
 
 
 @given(traces(max_size=15), st.integers(1, 4))

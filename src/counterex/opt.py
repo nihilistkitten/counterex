@@ -130,13 +130,13 @@ class McfOpt(ReplacementPolicy):
             total_cost += item.cost
             self._access(item)
 
-        note(f"START NODES: {self._start_nodes}")
-        note(f"END NODES: {self._end_nodes}")
-        note(f"CAPACITIES: {self._capacities}")
-        note(f"COSTS: {self._unit_costs}")
+        # note(f"START NODES: {self._start_nodes}")
+        # note(f"END NODES: {self._end_nodes}")
+        # note(f"CAPACITIES: {self._capacities}")
+        # note(f"COSTS: {self._unit_costs}")
 
         demand = self._gen_demand()
-        note(f"DEMANDS: {demand}")
+        # note(f"DEMANDS: {demand}")
 
         min_cost_flow = self._gen_min_cost_flow(demand)
         status = min_cost_flow.Solve()
